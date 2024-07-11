@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <button class="start-button" id="start-button">START</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const startButton = document.getElementById("start-button");
+
+            function startRecognition() {
+                fetch('/start-recognition', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Speech recognition process started:', data.status);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+
+             startButton.addEventListener("click", function() {
+                 // Start recognition immediately
+                startRecognition();
+
+                // Continue sending requests every 2 seconds
+               // setInterval(startRecognition, 2000);
+             });
+        });
+    </script>
+</body>
+</html>
